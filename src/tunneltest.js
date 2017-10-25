@@ -69,6 +69,7 @@ function doesConnectionWork(port) {
     "-o",
     "ConnectTimeout=" + config.timeoutSeconds,
     "-l",
+    "-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no",
     "pi",
     "-p",
     "" + port,
