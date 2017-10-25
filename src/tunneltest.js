@@ -108,5 +108,18 @@ function checkIfConnectionWorks(port) {
         resolve(false)
       }
     })
+    childProcess.on('close', (code) => {
+      if (code == 0) {
+        resolve(true)
+      } else {
+        resolve(false)
+      }
+    })
+    childProcess.on('disconnect', (code) => {
+      resolve(false)
+    })
+    childProcess.on('error', (code) => {
+      resolve(false)
+    })
   })
 }
