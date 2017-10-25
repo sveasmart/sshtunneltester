@@ -7,12 +7,11 @@ const connect = Promise.denodeify(MongoClient.connect)
 
 let dbConnection
 
-let devicesWithTunnelPortNumber = 0
+let devicesWithTunnelPortNumber = []
+let devicesThatWork = []
+let devicesThatDontWork = []
 
-console.log("10047: " + doesConnectionWork(10047))
-console.log("2222: " + doesConnectionWork(2222))
 
-/*
 console.log("Connecting to DB...")
 connect(config.mongoUrl)
 
@@ -30,19 +29,29 @@ connect(config.mongoUrl)
   }).then((devices) => {
 
     devices.forEach((device) => {
-      if (device.sshTunnelPort == 10047) {
-        devicesWithTunnelPortNumber = devicesWithTunnelPortNumber + 1
-        console.log("10047 Works: " + doesConnectionWork(device.sshTunnelPort))
+      if (device.sshTunnelPort) {
+        devicesWithTunnelPortNumber.push(device)
+        console.log("  testing " + device.deviceId + " (port " + device.sshTunnelPort + ")...")
+        if (doesConnectionWork(device.sshTunnelPort)) {
+          console.log("  ...works!")
+          devicesThatWork.push(device)
+        } else {
+          console.log("  ...doesn't work!")
+          devicesThatDontWork.push(device)
+        }
       }
     })
 
 
     console.log("We have " + devices.length + " devices")
-    console.log(devicesWithTunnelPortNumber + " have sshTunnelPortNumber")
+    console.log(devicesWithTunnelPortNumber.length + " have sshTunnelPortNumber")
+    console.log(devicesThatWork.length + " work")
+    console.log("")
+    console.log("The following devices don't work: ", devicesThatDontWork)
 
     dbConnection.close()
   })
-*/
+
 
 
 function doesConnectionWork(port) {
