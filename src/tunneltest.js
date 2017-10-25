@@ -9,7 +9,10 @@ let dbConnection
 
 let devicesWithTunnelPortNumber = 0
 
+console.log("10047: " + doesConnectionWork(10047))
+console.log("2222: " + doesConnectionWork(2222))
 
+/*
 console.log("Connecting to DB...")
 connect(config.mongoUrl)
 
@@ -29,10 +32,7 @@ connect(config.mongoUrl)
     devices.forEach((device) => {
       if (device.sshTunnelPort == 10047) {
         devicesWithTunnelPortNumber = devicesWithTunnelPortNumber + 1
-        const sshTestCommand = "ssh -l pi -p " + device.sshTunnelPort + " -i " + config.sshKey + " localhost exit"
-        console.log("Calling: " + sshTestCommand)
-        const result = child_process.spawnSync(sshTestCommand)
-        console.log(" => ", result)
+        console.log("10047 Works: " + doesConnectionWork(device.sshTunnelPort))
       }
     })
 
@@ -42,3 +42,21 @@ connect(config.mongoUrl)
 
     dbConnection.close()
   })
+*/
+
+
+function doesConnectionWork(port) {
+  const command = "ssh"
+  const args = [
+    "-i",
+    config.sshKey,
+    "-l",
+    "pi",
+    "-p",
+    "" + port,
+    "localhost",
+    "exit"
+  ]
+  const result = child_process.spawnSync(command, args)
+  return result.status == 0
+}
