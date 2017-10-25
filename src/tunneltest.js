@@ -32,20 +32,17 @@ connect(config.mongoUrl)
     devicesWithCorrectUpdaterVersion = devices.filter((device) => {
       return device.updaterVersion == config.expectedUpdaterVersion
     })
-    console.log(devicesWithCorrectUpdaterVersion.lenght + " of these have updater version " + config.expectedUpdaterVersion)
+
+    console.log(devicesWithCorrectUpdaterVersion.length + " of these have updater version " + config.expectedUpdaterVersion)
     console.log("Connecting to each one...")
 
-    devices.forEach((device) => {
-      if (device.sshTunnelPort && (device.updaterVersion == config.expectedUpdaterVersion)) {
-        devicesWithCorrectUpdaterVersion.push(device)
-
-        if (doesConnectionWork(device.sshTunnelPort)) {
-          process.stdout.write(".")
-          devicesThatWork.push(device)
-        } else {
-          process.stdout.write("X")
-          devicesThatDontWork.push(device)
-        }
+    devicesWithCorrectUpdaterVersion.forEach((device) => {
+      if (doesConnectionWork(device.sshTunnelPort)) {
+        process.stdout.write(".")
+        devicesThatWork.push(device)
+      } else {
+        process.stdout.write("X")
+        devicesThatDontWork.push(device)
       }
     })
     process.stdout.write("\n\n")
