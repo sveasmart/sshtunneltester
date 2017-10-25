@@ -47,7 +47,14 @@ connect(config.mongoUrl)
     console.log(devicesWithTunnelPortNumber.length + " have sshTunnelPortNumber")
     console.log(devicesThatWork.length + " work")
     console.log("")
-    console.log("The following devices don't work: ", devicesThatDontWork)
+    if (devicesThatDontWork.length > 0) {
+      console.log("The following " + devicesThatDontWork.length + " devices don't work: ")
+      devicesThatDontWork.forEach((device) => {
+        console.log("  - " + device.deviceId + " (port " + device.sshTunnelPort + ", updater " + device.updaterVersion + ")")
+      })
+    } else {
+      console.log("All devices work!")
+    }
 
     dbConnection.close()
   })
