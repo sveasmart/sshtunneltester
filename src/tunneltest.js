@@ -63,19 +63,25 @@ connect(config.mongoUrl)
 
 function createCheckConnectionPromise(device) {
   return new Promise((resolve, reject) => {
-    if (doesConnectionWork(device.sshTunnelPort)) {
-      process.stdout.write(".")
-      devicesThatWork.push(device)
-    } else {
-      process.stdout.write("X")
-      devicesThatDontWork.push(device)
-    }
-    resolve()
+    checkIfConnectionWorks(device.sshTunnelPort).then((works) => {
+      if (works) {
+        process.stdout.write(".")
+        devicesThatWork.push(device)
+      } else {
+        process.stdout.write("X")
+        devicesThatDontWork.push(device)
+      }
+      resolve()
+    })
+
   })
 }
 
 
-function doesConnectionWork(port) {
+/**
+ * Returns a promise that results in true/false depending on if the ssh connection worked.
+ */
+function checkIfConnectionWorks(port) {
   const command = "ssh"
   const args = [
     "-i",
@@ -93,6 +99,14 @@ function doesConnectionWork(port) {
     "localhost",
     "exit"
   ]
-  const result = child_process.spawnSync(command, args)
-  return result.status == 0
+  const childProcess = child_process.spawn(command, args)
+  return new Promise((resolve, reject) => {
+    childProcess.on('exit', (code) => {
+      if (code == 0) {
+        resolve(true)
+      } else {
+        resolve(false)
+      }
+    })
+  })
 }
