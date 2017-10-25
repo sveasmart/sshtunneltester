@@ -27,7 +27,7 @@ connect(config.mongoUrl)
   }).then((devices) => {
 
     devices.forEach((device) => {
-      if (device.sshTunnelPort == 10049) {
+      if (device.sshTunnelPort == 10047) {
         devicesWithTunnelPortNumber = devicesWithTunnelPortNumber + 1
         const sshTestCommand = "ssh -l pi -p " + device.sshTunnelPort + " -i " + config.sshKey + " localhost exit"
         console.log("Calling: " + sshTestCommand)
