@@ -7,10 +7,9 @@ const connect = Promise.denodeify(MongoClient.connect)
 
 let dbConnection
 
-let devicesWithTunnelPortNumber = []
+let devicesWithCorrectUpdaterVersion = []
 let devicesThatWork = []
 let devicesThatDontWork = []
-
 
 console.log("Connecting to DB...")
 connect(config.mongoUrl)
@@ -27,24 +26,28 @@ connect(config.mongoUrl)
     return cursor.toArray()
 
   }).then((devices) => {
+    console.log("Testing " + devices.length + " devices...")
 
     devices.forEach((device) => {
-      if (device.sshTunnelPort) {
-        devicesWithTunnelPortNumber.push(device)
-        console.log("  testing " + device.deviceId + " (port " + device.sshTunnelPort + ")...")
+      if (device.sshTunnelPort && (device.updaterVersion == config.expectedUpdaterVersion)) {
+        devicesWithCorrectUpdaterVersion.push(device)
+
         if (doesConnectionWork(device.sshTunnelPort)) {
-          console.log("  ...works!")
+          process.stdout.write(".")
           devicesThatWork.push(device)
         } else {
-          console.log("  ...doesn't work!")
+          process.stdout.write("X")
           devicesThatDontWork.push(device)
         }
       }
     })
+    process.stdout.write("\n")
 
 
-    console.log("We have " + devices.length + " devices")
-    console.log(devicesWithTunnelPortNumber.length + " have sshTunnelPortNumber")
+
+  console.log("=========================================")
+  console.log("We have " + devices.length + " devices")
+    console.log(devicesWithCorrectUpdaterVersion.length + " have updater version " + config.expectedUpdaterVersion)
     console.log(devicesThatWork.length + " work")
     console.log("")
     if (devicesThatDontWork.length > 0) {
