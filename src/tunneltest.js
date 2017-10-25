@@ -27,7 +27,13 @@ connect(config.mongoUrl)
     return cursor.toArray()
 
   }).then((devices) => {
-    console.log("Testing " + devices.length + " devices...")
+    console.log("We have " + devices.length + " devices.")
+
+    devicesWithCorrectUpdaterVersion = devices.filter((device) => {
+      return device.updaterVersion == config.expectedUpdaterVersion
+    })
+    console.log(devicesWithCorrectUpdaterVersion.lenght + " of these have updater version " + config.expectedUpdaterVersion)
+    console.log("Connecting to each one...")
 
     devices.forEach((device) => {
       if (device.sshTunnelPort && (device.updaterVersion == config.expectedUpdaterVersion)) {
@@ -43,17 +49,15 @@ connect(config.mongoUrl)
       }
     })
     process.stdout.write("\n\n")
-    console.log("We have " + devices.length + " devices")
-    console.log(devicesWithCorrectUpdaterVersion.length + " devices have updater version " + config.expectedUpdaterVersion)
-    console.log(devicesThatWork.length + " devices work")
+    console.log(devicesThatWork.length + " have a working SSH tunnel.")
     console.log("")
     if (devicesThatDontWork.length > 0) {
-      console.log(devicesThatDontWork.length + " devices don't work: ")
+      console.log(devicesThatDontWork.length + " were not reachable:")
       devicesThatDontWork.forEach((device) => {
         console.log("  - " + device.deviceId + " (port " + device.sshTunnelPort + ", updater " + device.updaterVersion + ")")
       })
     } else {
-      console.log("All devices work!")
+      console.log("That's all of them! Yay!")
     }
 
     dbConnection.close()
