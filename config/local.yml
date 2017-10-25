@@ -1,0 +1,2 @@
+mongoUrl: mongodb://sveasmart-readonly:hoppla67@ds129761-a0.mlab.com:29761,ds129761-a1.mlab.com:29761/sveasmart?replicaSet=rs-ds129761
+sshKey:  ../installation/ssh_key/jumphost_id_rsa
