@@ -11,6 +11,7 @@ let devicesWithCorrectUpdaterVersion = []
 let devicesThatWork = []
 let devicesThatDontWork = []
 
+console.log("\n====================================================================")
 console.log("Connecting to DB...")
 connect(config.mongoUrl)
 
@@ -41,17 +42,13 @@ connect(config.mongoUrl)
         }
       }
     })
-    process.stdout.write("\n")
-
-
-
-  console.log("=========================================")
-  console.log("We have " + devices.length + " devices")
-    console.log(devicesWithCorrectUpdaterVersion.length + " have updater version " + config.expectedUpdaterVersion)
-    console.log(devicesThatWork.length + " work")
+    process.stdout.write("\n\n")
+    console.log("We have " + devices.length + " devices")
+    console.log(devicesWithCorrectUpdaterVersion.length + " devices have updater version " + config.expectedUpdaterVersion)
+    console.log(devicesThatWork.length + " devices work")
     console.log("")
     if (devicesThatDontWork.length > 0) {
-      console.log("The following " + devicesThatDontWork.length + " devices don't work: ")
+      console.log(devicesThatDontWork.length + " devices don't work: ")
       devicesThatDontWork.forEach((device) => {
         console.log("  - " + device.deviceId + " (port " + device.sshTunnelPort + ", updater " + device.updaterVersion + ")")
       })
