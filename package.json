@@ -1,0 +1,25 @@
+{
+  "name": "sshtunneltester",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/tunneltest.js",
+  "scripts": {
+    "start": "node src/tunneltest.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sveasmart/sshtunneltester.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sveasmart/sshtunneltester/issues"
+  },
+  "homepage": "https://github.com/sveasmart/sshtunneltester#readme",
+  "dependencies": {
+    "config": "1.24.0",
+    "js-yaml": "3.7.0",
+    "mongodb": "^2.2.33",
+    "promise": "7.1.1"
+  }
+}
