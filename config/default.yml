@@ -1,1 +1,1 @@
-sshKey: .ssh/id_rsa
+sshKey: ~/.ssh/id_rsa
