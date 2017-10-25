@@ -59,6 +59,8 @@ function doesConnectionWork(port) {
   const args = [
     "-i",
     config.sshKey,
+    "-o",
+    "ConnectTimeout=" + config.timeoutSeconds,
     "-l",
     "pi",
     "-p",
