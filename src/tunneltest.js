@@ -60,6 +60,9 @@ connect(config.mongoUrl)
 
   dbConnection.close()
 })
+.catch((err) => {
+  console.log("Error", err)
+})
 
 function createCheckConnectionPromise(device) {
   return new Promise((resolve, reject) => {
@@ -72,6 +75,9 @@ function createCheckConnectionPromise(device) {
         devicesThatDontWork.push(device)
       }
       resolve()
+    }).catch((err) => {
+      console.log("Error from checkIfConnectionWorks: " + err)
+      reject()
     })
 
   })
