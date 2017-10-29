@@ -21,7 +21,7 @@ connect(config.mongoUrl)
   dbConnection = db
 
   const Devices = db.collection('devices')
-  return Devices.find({}, {deviceId: 1, sshTunnelPort: 1, updaterVersion: 1})
+  return Devices.find({}, {deviceId: 1, sshTunnelPort: 1, updaterVersion: 1, nextExpectedSignOfLife: 1})
 
 }).then((cursor) => {
 
@@ -52,7 +52,13 @@ connect(config.mongoUrl)
   if (devicesThatDontWork.length > 0) {
     console.log(devicesThatDontWork.length + " were not reachable:")
     devicesThatDontWork.forEach((device) => {
-      console.log("  - " + device.deviceId + " (port " + device.sshTunnelPort + ", updater " + device.updaterVersion + ")")
+      let updaterStatus
+      if (isUpdaterOnline(device)) {
+        updaterStatus = "online"
+      } else {
+        updaterStatus = "OFFLINE"
+      }
+      console.log("  - " + device.deviceId + " (port " + device.sshTunnelPort + ", updater " + device.updaterVersion + " " + updaterStatus + ")")
     })
   } else {
     console.log("That's all of them! Yay!")
@@ -128,4 +134,20 @@ function checkIfConnectionWorks(port) {
       resolve(false)
     })
   })
+}
+
+function isUpdaterOnline(device) {
+  const now = new Date()
+  const nextExpectedSignOfLife = device.nextExpectedSignOfLife
+  if (!nextExpectedSignOfLife) {
+    return false
+  }
+  //If nextExpectedSignOfLife is in the past, then updater is offline.
+  //Adding a 10 second margin.
+  const margin = 10000
+  if (nextExpectedSignOfLife.getTime() < (now.getTime() - margin)) {
+    return false
+  } else {
+    return true
+  }
 }
