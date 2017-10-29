@@ -31,10 +31,10 @@ connect(config.mongoUrl)
   console.log("We have " + devices.length + " devices.")
 
   devicesWithCorrectUpdaterVersion = devices.filter((device) => {
-    return device.updaterVersion == config.expectedUpdaterVersion
+    return device.updaterVersion >= config.expectedUpdaterVersion
   })
 
-  console.log(devicesWithCorrectUpdaterVersion.length + " of these have updater version " + config.expectedUpdaterVersion)
+  console.log(devicesWithCorrectUpdaterVersion.length + " of these have updater version >= " + config.expectedUpdaterVersion)
   console.log("Connecting to each one...")
 
   const checkConnectionPromises = []
