@@ -21,7 +21,7 @@ connect(config.mongoUrl)
   dbConnection = db
 
   const Devices = db.collection('devices')
-  return Devices.find({}, {deviceId: 1, sshTunnelPort: 1, updaterVersion: 1, nextExpectedSignOfLife: 1})
+  return Devices.find({deleted: {$exists: false}}, {deviceId: 1, sshTunnelPort: 1, updaterVersion: 1, nextExpectedSignOfLife: 1})
 
 }).then((cursor) => {
 
